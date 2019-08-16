@@ -1,0 +1,119 @@
+<html>
+  <head>
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+<style>
+body {
+  font-family: sans-serif;
+}
+#title {
+  border-bottom: solid 2px black;
+}
+
+.sub-title {
+  border-bottom: solid 1px black;
+}
+
+li {
+  padding: 1rem;
+}
+
+.mastered {
+  background-color: tomato;
+  color: white;
+}
+</style>
+  </head>
+  <body>
+    <div id='root'></div>
+    <script>
+      const { render } = ReactDOM;
+      const { createElement, Component } = React;
+      const root = document.querySelector('#root'); //always the starting point!!!
+
+      class App extends Component{
+        constructor(){
+          super();
+          const arrayMethods = [
+            { id: 1, name: 'forEach', mastered: true },
+            { id: 2, name: 'filter' },
+            { id: 3, name: 'map', mastered: true},
+            { id: 4, name: 'reduce' },
+            { id: 5, name: 'find' },
+          ];
+          this.state = {
+            arrayMethods
+          };
+
+        }
+        render(){
+          const { arrayMethods } = this.state;
+
+          const toggle = (arrayMethod)=> {
+          arrayMethod.mastered = !arrayMethod.mastered;
+          const arrayMethods = this.state.arrayMethods.filter(method=> arrayMethod.id !== method.id);
+          this.setState({ arrayMethods }); //this alters the visual changes
+
+        };
+        const h1 = createElement('h1', { id: 'title'}, 'Javascript');
+        const h2 = createElement('h2', { className: 'sub-title'}, 'Array Methods');
+
+
+        const lis = arrayMethods.map( arrayMethod => createElement(
+          'li',
+          {
+            key: arrayMethod.id,
+            className: arrayMethod.mastered ? 'mastered': '',
+            onClick: ()=> toggle(arrayMethod)
+          },
+          arrayMethod.name)
+        );
+        const ul = createElement('ul', null, lis);
+        return createElement('div', null, h1, h2, ul);
+      }}
+
+
+      /*
+      const App = ()=> {
+        const toggle = (arrayMethod)=> {
+          arrayMethod.mastered = !arrayMethod.mastered;
+          console.log(arrayMethods);
+        }
+        const h1 = createElement('h1', { id: 'title'}, 'Javascript');
+        const h2 = createElement('h2', { className: 'sub-title'}, 'Array Methods');
+
+        const arrayMethods = [
+          { id: 1, name: 'forEach', mastered: true },
+          { id: 2, name: 'filter' },
+          { id: 3, name: 'map', mastered: true},
+          { id: 4, name: 'reduce' },
+          { id: 5, name: 'find' },
+        ];
+
+        setTimeout(()=> {
+          arrayMethods[0].mastered = false;
+        }, 500);
+
+        const lis = arrayMethods.map( arrayMethod => createElement(
+          'li',
+          {
+            key: arrayMethod.id,
+            className: arrayMethod.mastered ? 'mastered': '',
+            onClick: ()=> toggle(arrayMethod)
+          },
+          arrayMethod.name)
+        );
+        const ul = createElement('ul', null, lis);
+        return createElement('div', null, h1, h2, ul);
+      }
+*/
+      render(React.createElement(App), root); //calls new instance of this App
+/* // vvv if we did this line below -2 would appear each have their own state and rendermethod
+when thereis a state change, React will call render. when you call setstate it will render vvvvv
+
+    render(createElement('div', null, createElement(App), createElement(App)), root);
+*/
+
+    </script>
+  </body>
+</html>
